@@ -1,0 +1,163 @@
+{
+    "broker": {
+        "addr": "0.0.0.0",
+        "port": 1883,
+        "tls": false,
+        "anonymus": false,
+        "username": "",
+        "passwd": ""
+    },
+    "temperature_and_humidity": {
+        "mqtt": {
+            "publish": {
+                "humidity": {
+                    "topic": "garden/humidity"
+                },
+                "temperature": {
+                    "topic": "garden/temp"
+                }
+            }
+        }
+    },
+    "sprinklers_program_1": {
+        "name": "The name of the first program",
+        "mqtt": {
+            "subscribe&publish": {
+                "water_valve": {
+                    "topic": "garden/waterdistributor",
+                    "payloads": {
+                        "open": "ON",
+                        "close": "OFF"
+                    }
+                }
+            },
+            "publish": {
+                "alarm": {
+                    "topic": "garden/alarm",
+                    "payloads": {
+                        "sequence_failure": "WATER_SEQUENCE_FAILURE"
+                    }
+                },
+                "status": {
+                    "topic": "garden/info"
+                }
+            }
+        },
+        "sequence_config": {
+            "switching_time": 20,
+            "off_time": 5,
+            "sequence": [
+                [
+                    "Section 1",
+                    20
+                ],
+                [
+                    "Section 2",
+                    20
+                ],
+                [
+                    "Section 3",
+                    20
+                ],
+                [
+                    "Section 4",
+                    40
+                ]
+            ]
+        }
+    },
+    "sprinklers_program_2": {
+        "name": "The name of the second program",
+        "mqtt": {
+            "subscribe&publish": {
+                "water_valve": {
+                    "topic": "garden/sprinklers_balcony",
+                    "payloads": {
+                        "open": "ON",
+                        "close": "OFF"
+                    }
+                }
+            },
+            "publish": {
+                "alarm": {
+                    "topic": "garden/alarm",
+                    "payloads": {
+                        "sequence_failure": "WATER_SEQUENCE_FAILURE"
+                    }
+                },
+                "status": {
+                    "topic": "garden/info"
+                }
+            }
+        },
+        "sequence_config": {
+            "switching_time": 20,
+            "off_time": 5,
+            "sequence": [
+                [
+                    "Section 1",
+                    1
+                ],
+                [
+                    "Section 2",
+                    1
+                ],
+                [
+                    "Section 3",
+                    1
+                ],
+                [
+                    "Section 4",
+                    40
+                ]
+            ]
+        }
+    },
+    "sprinklers_program_3": {
+        "name": "The name of the third program",
+        "mqtt": {
+            "subscribe&publish": {
+                "water_valve": {
+                    "topic": "garden/sprinklers_balcony",
+                    "payloads": {
+                        "open": "ON",
+                        "close": "OFF"
+                    }
+                }
+            },
+            "publish": {
+                "alarm": {
+                    "topic": "garden/alarm",
+                    "payloads": {
+                        "sequence_failure": "WATER_SEQUENCE_FAILURE"
+                    }
+                },
+                "status": {
+                    "topic": "garden/info"
+                }
+            }
+        },
+        "sequence_config": {
+            "switching_time": 20,
+            "off_time": 5,
+            "sequence": [
+                [
+                    "Section 1",
+                    1
+                ],
+                [
+                    "Section 2",
+                    20
+                ],
+                [
+                    "Section 3",
+                    1
+                ],
+                [
+                    "Section 4",
+                    1
+                ]
+            ]
+        }
+    }
+}
