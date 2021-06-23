@@ -3,12 +3,15 @@
 
 import logging
 import time
+import threading
 from pg_iot import config
 from pg_iot import actor
 try:
     import automationhat
 except ImportError:
     import mocks.automationhat as automationhat
+
+lock = threading.Lock()
 
 
 class Watering(actor.Actor):
@@ -39,10 +42,34 @@ class Watering(actor.Actor):
             logging.debug("sleep: " + str(t))
             time.sleep(1)
             if bytes(self.message_off, "utf8") == super().get_message(self.topic):
-                logging.debug("Break!")
+                logging.info(
+                    "INTERRUPT: Request Stop [" + self.program_name + "]")
                 self.break_active = True
             if True == self.break_active and t >= self.switching_time - 1:
                 break
+
+    def run_sequence(self):
+        logging.info("Water sequence start [" + self.program_name + "]")
+        self.break_active = False
+        # super().put_message(self.topic, self.message_on)
+
+        for op_name, duration in self.sequence:
+            logging.debug("Operation: " + op_name +
+                          ", duration: " + str(duration))
+            super().put_message(self.topic_status, op_name)
+
+            logging.debug("Valve activate")
+            automationhat.relay.one.on()
+            self.sleep_break(duration)
+
+            logging.debug("Valve deactivate")
+            automationhat.relay.one.off()
+            self.sleep_break(self.off_time)
+
+        logging.info("Water sequence stop [" + self.program_name + "]")
+        super().put_message(self.topic, self.message_off)
+        super().put_message(self.topic_status, "Idle")
+        automationhat.relay.one.off()
 
     def run(self, event):
         logging.info(
@@ -56,30 +83,9 @@ class Watering(actor.Actor):
         while not event.is_set():
             message = super().get_message(self.topic)
 
-            # TODO: Use semaphore to block other instances here!
-
             if bytes(self.message_on, "utf8") == message:
-                logging.debug("Water sequence start")
-
-                self.break_active = False
-
-                for op_name, duration in self.sequence:
-                    logging.debug("Operation: " + op_name +
-                                  ", duration: " + str(duration))
-                    super().put_message(self.topic_status, op_name)
-
-                    logging.debug("Valve activate")
-                    automationhat.relay.one.on()
-                    self.sleep_break(duration)
-
-                    logging.debug("Valve deactivate")
-                    automationhat.relay.one.off()
-                    self.sleep_break(self.off_time)
-
-                logging.debug("Water sequence stop")
-                super().put_message(self.topic, self.message_off)
-                super().put_message(self.topic_status, "Idle")
-                automationhat.relay.one.off()
+                with lock:
+                    self.run_sequence()
 
             time.sleep(0.1)
 
