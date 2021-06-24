@@ -7,17 +7,17 @@ from pg_iot import config
 def publish(params):
     event, modules, session = params
 
-    logging.debug("Hi from Publish!")
+    logging.info("START Communication")
     while not event.is_set():
         for module in modules:
             for pub in module.pubs:
                 while not pub.queue.empty():
                     message = pub.queue.get(False)
-                    logging.debug("Publishing: " + pub.topic + " " + message)
+                    logging.info("Publishing: " + pub.topic + " " + message)
                     session.publish(pub.topic, message, 0, False)
         time.sleep(0.1)
 
-    logging.debug("Publish STOP")
+    logging.info("STOP Communication")
 
 
 def on_message(session, userdata, msg):
@@ -27,11 +27,12 @@ def on_message(session, userdata, msg):
             if msg.topic == sub.topic:
                 sub.queue.put(msg.payload)
 
-# The callback for when the client receives a CONNACK response from the server.
-
 
 def on_connect(session, userdata, flags, rc):
-    logging.debug("Connected with result code "+str(rc))
+    """ The callback for when the client receives a CONNACK response from the server """
+
+    logging.info("Connection to MQTT Broker established")
+    logging.debug("Result code: "+str(rc))
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -42,7 +43,7 @@ def on_connect(session, userdata, flags, rc):
 
 
 def connect(conf: config.Config, modules):
-    """ Connect to the siot infrastructure """
+    """ Connect to the MQTT Broker """
 
     # Read configuration
     configuration = conf.get("broker")
