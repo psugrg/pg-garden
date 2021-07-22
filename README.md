@@ -12,8 +12,8 @@ The python based application for Raspberry Pi to control the garden.
 - [x] Cleanup the logging
 - [x] Move the application to github.
 - [x] Create `pg-garden` shell script that calls the `/opt/pg-garden/pg-garden.py` application.
-- [ ] MQTT State and Command topic must be separated (currently it's the same topc). This will allow safe and easy state change reporting and confirmation (currently it's not possible)
-- [ ] Make the installation script. It should install the application to `/opt/pg-garden`. The script should copy the `pg-garden` shell script to `/usr/local/bin`
+- [ ] MQTT State and Command topics must be separated (currently it's the same topic). This will allow safe and easy state change reporting and confirmation (currently it's not possible)
+- [x] Make the installation script. It should install the application to `/opt/pg-garden`. The script should copy the `pg-garden` shell script to `/usr/local/bin`
 
 ## Requirements
 
