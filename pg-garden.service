@@ -1,0 +1,10 @@
+[Unit]
+Description=PG Garden application
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /usr/local/bin/pg-garden > /tmp/pg-garden.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
