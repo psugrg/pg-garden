@@ -17,7 +17,7 @@ rm /usr/local/bin/pg-garden
 cp pg-garden /usr/local/bin
 
 # Enable PG Garden systemd service
-rm pg-garden.service /lib/systemd/system
+mv pg-garden.service /lib/systemd/system
 systemctl daemon-reload
 systemctl enable pg-garden.service
 
