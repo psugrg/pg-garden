@@ -9,14 +9,16 @@ cp -r pg_iot /opt/pg-garden
 cp pg_garden.py /opt/pg-garden
 cp LICENSE /opt/pg-garden
 
-rm -r /etc/opt/pg-garden
-mkdir /etc/opt/pg-garden
+# Install configuration files
+mkdir -p /etc/opt/pg-garden
 cp config.json /etc/opt/pg-garden
 
+# Install launcher
 rm /usr/local/bin/pg-garden
 cp pg-garden /usr/local/bin
 
 # Enable PG Garden systemd service
+systemctl disable pg-garden.service
 mv pg-garden.service /lib/systemd/system
 systemctl daemon-reload
 systemctl enable pg-garden.service
