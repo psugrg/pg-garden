@@ -14,6 +14,7 @@ The python based application for Raspberry Pi to control the garden.
 - [x] Create `pg-garden` shell script that calls the `/opt/pg-garden/pg-garden.py` application.
 - [ ] MQTT State and Command topics must be separated (currently it's the same topic). This will allow safe and easy state change reporting and confirmation (currently it's not possible)
 - [x] Make the installation script. It should install the application to `/opt/pg-garden`. The script should copy the `pg-garden` shell script to `/usr/local/bin`
+- [x] Make `pg-garden` `systemd` service to automatically start the application on startup
 
 ## Requirements
 
@@ -25,3 +26,9 @@ The python based application for Raspberry Pi to control the garden.
 ### Raspberry Pi (target)
 
 - automationhat (`pip3 install automationhat`)
+
+## Useful Development Information
+
+### Debugging
+
+use `journalctl -r` command to analyze logs from the `systemd` (errors from python will be present)
